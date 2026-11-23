@@ -11,6 +11,7 @@ on:
     branches: [main]
 
 jobs:
+  # ---------- Tes API (unit + integrasi dengan Postgres sungguhan) dan tes logika mobile ----------
   tests:
     runs-on: ubuntu-latest
     services:
@@ -45,6 +46,7 @@ jobs:
         working-directory: apps/mobile
         run: node --test "test/*.test.js"
 
+  # ---------- Build APK (ditandatangani kunci debug: bisa dipasang langsung, bukan untuk Play Store) ----------
   apk:
     runs-on: ubuntu-latest
     env:
