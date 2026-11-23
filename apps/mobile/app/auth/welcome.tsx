@@ -22,7 +22,7 @@ export default function Welcome() {
           <T size="sm" color={theme.colors.accent} onPress={() => TERMS_URL && Linking.openURL(TERMS_URL)}>Ketentuan Layanan</T> dan{' '}
           <T size="sm" color={theme.colors.accent} onPress={() => PRIVACY_URL && Linking.openURL(PRIVACY_URL)}>Kebijakan Privasi</T>.
         </T>
-        <Button size="lg" title="Mulai" onPress={() => router.push('/auth/phone')} />
+        <Button size="lg" title="Mulai beta tanpa nomor HP" onPress={() => router.push('/auth/guest')} />
       </View>
     </SafeAreaView>
   );
