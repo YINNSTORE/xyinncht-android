@@ -48,6 +48,7 @@ jobs:
 
   # ---------- Build APK (ditandatangani kunci debug: bisa dipasang langsung, bukan untuk Play Store) ----------
   apk:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     env:
       API_URL: ${{ inputs.api_url || vars.API_URL || 'http://10.0.2.2:3000' }}
