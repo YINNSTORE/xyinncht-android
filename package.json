@@ -1,0 +1,12 @@
+{
+  "name": "xyinncht",
+  "private": true,
+  "workspaces": ["apps/api", "apps/admin"],
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "api:dev": "npm run dev -w apps/api",
+    "admin:dev": "npm run dev -w apps/admin",
+    "test:unit": "npm run test:unit -w apps/api && node --test \"apps/mobile/test/*.test.js\"",
+    "test:integration": "npm run test:integration -w apps/api"
+  }
+}

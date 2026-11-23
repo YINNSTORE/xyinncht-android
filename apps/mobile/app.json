@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "XyinnCht",
+    "slug": "xyinncht",
+    "scheme": "xyinncht",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "com.xyinncht.app",
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      ["expo-notifications", { "defaultChannel": "messages" }],
+      ["expo-image-picker", { "photosPermission": "XyinnCht memerlukan akses foto untuk mengirim gambar." }]
+    ],
+    "experiments": { "typedRoutes": false },
+    "extra": {
+      "apiUrl": "http://10.0.2.2:3000",
+      "supportEmail": "support@contoh.com",
+      "privacyUrl": "https://contoh.com/privasi",
+      "termsUrl": "https://contoh.com/ketentuan",
+      "eas": { "projectId": "" }
+    }
+  }
+}

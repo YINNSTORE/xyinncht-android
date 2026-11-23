@@ -1,0 +1,28 @@
+{
+  "name": "@xyinncht/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "node --env-file=.env --watch src/server.js",
+    "start": "node src/server.js",
+    "migrate": "node --env-file=.env src/scripts/migrate.js",
+    "create-admin": "node --env-file=.env src/scripts/create-admin.js",
+    "test:unit": "node --test \"test/unit/*.test.js\"",
+    "test:integration": "node --env-file=.env.test --test --test-concurrency=1 \"test/integration/*.test.js\""
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "@aws-sdk/s3-request-presigner": "^3.600.0",
+    "@fastify/cors": "^10.0.0",
+    "@fastify/rate-limit": "^10.0.0",
+    "@fastify/websocket": "^11.0.0",
+    "argon2": "^0.41.0",
+    "fastify": "^5.0.0",
+    "jose": "^5.9.0",
+    "otplib": "^12.0.1",
+    "pg": "^8.12.0",
+    "zod": "^3.23.0"
+  }
+}
