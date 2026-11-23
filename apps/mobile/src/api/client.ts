@@ -76,20 +76,35 @@ export async function freshAccessToken(): Promise<string | null> {
 type Opts = { method?: string; body?: unknown; auth?: boolean };
 
 export async function api<T = any>(path: string, opts: Opts = {}): Promise<T> {
-  const call = async () =>
-    fetch(API_URL + path, {
-      method: opts.method ?? (opts.body ? 'POST' : 'GET'),
-      headers: {
-        ...(opts.body ? { 'content-type': 'application/json' } : {}),
-        ...(opts.auth !== false && tokens ? { authorization: `Bearer ${tokens.access_token}` } : {}),
-      },
-      body: opts.body ? JSON.stringify(opts.body) : undefined,
-    });
+  const call = async () => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      return await fetch(API_URL + path, {
+        method: opts.method ?? (opts.body ? 'POST' : 'GET'),
+        headers: {
+          ...(opts.body ? { 'content-type': 'application/json' } : {}),
+          ...(opts.auth !== false && tokens ? { authorization: `Bearer ${tokens.access_token}` } : {}),
+        },
+        body: opts.body ? JSON.stringify(opts.body) : undefined,
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+  };
   let res: Response;
   try {
     res = await call();
-  } catch {
-    throw new ApiError(0, 'network', 'Tidak ada koneksi ke server');
+  } catch (e) {
+    const timedOut = e instanceof Error && e.name === 'AbortError';
+    throw new ApiError(
+      0,
+      timedOut ? 'timeout' : 'network',
+      timedOut
+        ? 'Server tidak merespons selama 15 detik. Periksa URL API dan pastikan server aktif.'
+        : 'Tidak dapat terhubung ke server. Periksa koneksi internet dan URL API.',
+    );
   }
   if (res.status === 401 && opts.auth !== false && tokens) {
     if (await refreshTokens()) res = await call();
