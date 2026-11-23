@@ -47,9 +47,8 @@ export default function GuestLogin() {
         <T size="xl" weight="bold">Masuk beta XyinnCht</T>
         <T muted>Mode uji coba sementara. Nomor HP belum diperlukan. Gunakan kode akses beta dari pemilik server.</T>
         <Input label="Nama tampilan" value={displayName} onChangeText={setDisplayName} maxLength={60} autoFocus />
-        <Input label="Username (3–24 karakter)" value={username} onChangeText={setUsername} maxLength={24} />
-        <Input label="Kode akses beta" value={accessCode} onChangeText={setAccessCode} maxLength={128} />
-        {error ? <T color="danger">{error}</T> : null}
+        <Input label="Username (3–24 karakter)" value={username} onChangeText={setUsername} maxLength={24} autoCapitalize="none" autoCorrect={false} />
+        <Input label="Kode akses beta" value={accessCode} onChangeText={setAccessCode} maxLength={128} secureTextEntry error={error} autoCapitalize="none" />
         <View>
           <Button title="Masuk & mulai chat" loading={loading} disabled={!displayName.trim() || !validUsername || accessCode.length < 16} onPress={submit} />
         </View>
