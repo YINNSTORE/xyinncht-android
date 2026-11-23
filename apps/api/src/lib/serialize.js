@@ -9,7 +9,7 @@ export const publicUser = (u) => ({
 
 export const selfUser = (u) => ({
   ...publicUser(u),
-  phone: u.phone,
+  phone: u.phone ?? '',
   status: u.status,
   profile_completed: u.profile_completed,
   show_last_seen: u.show_last_seen,
