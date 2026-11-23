@@ -6,14 +6,14 @@ create extension if not exists pgcrypto;
 -- ===== Pengguna =====
 create table users (
   id uuid primary key default gen_random_uuid(),
-  phone text not null unique check (phone ~ '^\+[1-9][0-9]{6,14}$'),   -- E.164
+  phone text unique check (phone ~ '^\\+[1-9][0-9]{6,14}$'),   -- E.164; NULL untuk akun beta tanpa nomor HP
   username text unique check (username ~ '^[a-z0-9_]{3,24}$'),
   display_name text not null check (char_length(display_name) between 1 and 60),
   about text not null default '' check (char_length(about) <= 140),
   avatar_url text,
-  is_verified boolean not null default false,       -- centang biru, hanya admin
+  is_verified boolean not null default false,
   verified_at timestamptz,
-  verified_by uuid,                                 -- admins.id
+  verified_by uuid,
   status text not null default 'active' check (status in ('active','banned')),
   banned_at timestamptz,
   ban_reason text,
@@ -74,7 +74,7 @@ create table blocks (
 create table conversations (
   id uuid primary key default gen_random_uuid(),
   type text not null check (type in ('direct','group')),
-  direct_key text unique,                           -- 'idkecil:idbesar' agar 1-1 tidak ganda
+  direct_key text unique,
   title text,
   avatar_url text,
   created_by uuid references users(id) on delete set null,
@@ -97,9 +97,9 @@ create index on conversation_members (user_id);
 create table messages (
   id uuid primary key default gen_random_uuid(),
   conversation_id uuid not null references conversations(id) on delete cascade,
-  seq bigint not null,                              -- urutan per percakapan
+  seq bigint not null,
   sender_id uuid not null references users(id) on delete cascade,
-  client_id uuid not null,                          -- dari klien; mencegah pesan ganda
+  client_id uuid not null,
   type text not null default 'text' check (type in ('text','image')),
   body text check (char_length(body) <= 4000),
   media_url text,
@@ -124,8 +124,8 @@ create index on message_receipts (user_id, read_at);
 create table admins (
   id uuid primary key default gen_random_uuid(),
   email text not null unique,
-  password_hash text not null,                      -- argon2id
-  totp_secret_enc text not null,                    -- terenkripsi di aplikasi
+  password_hash text not null,
+  totp_secret_enc text not null,
   role text not null default 'moderator' check (role in ('moderator','superadmin')),
   failed_logins int not null default 0,
   locked_until timestamptz,
