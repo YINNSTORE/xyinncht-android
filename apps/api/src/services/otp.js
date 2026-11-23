@@ -2,7 +2,7 @@ import { hmacOtp, randomOtp, safeEqualHex } from '../lib/crypto.js';
 
 const MAX_ATTEMPTS = 5;
 
-// Penyedia OTP: 'dev' (kode lokal, hanya non-produksi) atau 'twilio' (Verify API).
+// Penyedia OTP: dev (lokal), twilio (SMS), atau disabled (login HP dimatikan sementara).
 export function createOtp({ cfg, db, fetchImpl = fetch, log = console }) {
   const twilioAuth = () =>
     'Basic ' + Buffer.from(`${cfg.TWILIO_ACCOUNT_SID}:${cfg.TWILIO_AUTH_TOKEN}`).toString('base64');
@@ -25,6 +25,7 @@ export function createOtp({ cfg, db, fetchImpl = fetch, log = console }) {
   }
 
   async function request(phone, ip) {
+    if (cfg.OTP_PROVIDER === 'disabled') return { ok: false, reason: 'disabled' };
     if (!(await withinLimits(phone, ip))) return { ok: false, reason: 'rate_limited' };
     if (cfg.OTP_PROVIDER === 'twilio') {
       await db.query(
@@ -52,6 +53,7 @@ export function createOtp({ cfg, db, fetchImpl = fetch, log = console }) {
   }
 
   async function verify(phone, code) {
+    if (cfg.OTP_PROVIDER === 'disabled') return false;
     if (cfg.OTP_PROVIDER === 'twilio') {
       const res = await fetchImpl(twilioUrl('VerificationCheck'), {
         method: 'POST',
