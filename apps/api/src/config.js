@@ -10,12 +10,12 @@ const schema = z
     TOTP_ENC_KEY: z.string().regex(/^[0-9a-fA-F]{64}$/, 'harus 64 karakter hex'),
     OTP_HMAC_SECRET: z.string().min(8),
     OTP_PROVIDER: z.enum(['dev', 'twilio', 'disabled']).default('dev'),
-    OTP_DEV_CODE: z.string().regex(/^\\d{6}$/).optional(),
+    OTP_DEV_CODE: z.string().regex(/^\d{6}$/).optional(),
     TWILIO_ACCOUNT_SID: z.string().optional(),
     TWILIO_AUTH_TOKEN: z.string().optional(),
     TWILIO_VERIFY_SID: z.string().optional(),
     GUEST_LOGIN_ENABLED: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
-    GUEST_ACCESS_CODE: z.string().min(16).optional(),
+    GUEST_ACCESS_CODE: z.preprocess((v) => (v === '' ? undefined : v), z.string().min(16).optional()),
     S3_ENDPOINT: z.string().optional(),
     S3_BUCKET: z.string().optional(),
     S3_ACCESS_KEY_ID: z.string().optional(),
@@ -43,8 +43,8 @@ const schema = z
 export function loadConfig(env = process.env) {
   const r = schema.safeParse(env);
   if (!r.success) {
-    const msg = r.error.issues.map((i) => `${i.path.join('.') || 'config'}: ${i.message}`).join('\\n');
-    throw new Error('Konfigurasi tidak valid:\\n' + msg);
+    const msg = r.error.issues.map((i) => `${i.path.join('.') || 'config'}: ${i.message}`).join('\n');
+    throw new Error('Konfigurasi tidak valid:\n' + msg);
   }
   return r.data;
 }
