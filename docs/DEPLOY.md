@@ -28,7 +28,7 @@ Ganti `DOMAIN_KAMU` dengan domain yang dipilih di DevilWEB. Jangan jalankan clon
 cd ~/domains/DOMAIN_KAMU/public_nodejs/apps/api
 export C=clang
 export CXX=clang++
-npm install --omit=dev
+npm install --omit=dev --workspaces=false
 ```
 
 Jika dependency native `argon2` gagal dikompilasi, periksa log instalasi dan compiler yang tersedia di akun Serv00. Jangan menghapus dependency atau melewati error instalasi.
@@ -69,7 +69,7 @@ File `app.js` di root repository adalah entry point CommonJS untuk Passenger dan
 devil www restart DOMAIN_KAMU
 ```
 
-Periksa `https://DOMAIN_KAMU/health`. Respons sehat harus berupa JSON `{"ok":true}`. Log error Passenger berada di `~/domains/DOMAIN_KAMU/logs/error.log`.
+Periksa `https://DOMAIN_KAMU/health`. Respons sehat harus berupa JSON `{"ok":true}`. Log error Passenger berada di `~/domains/DOMAIN_KAMU/logs/error.log`. Atur jumlah proses Passenger menjadi satu agar koneksi WebSocket dan hub online berada pada proses yang sama: `devil www options DOMAIN_KAMU processes 1`.
 
 Serv00 Passenger mendukung WebSocket. Aplikasi Android akan memakai endpoint `wss://DOMAIN_KAMU/ws` setelah URL API di konfigurasi build Android diarahkan ke domain HTTPS tersebut.
 
