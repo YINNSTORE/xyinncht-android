@@ -6,7 +6,7 @@ create extension if not exists pgcrypto;
 -- ===== Pengguna =====
 create table users (
   id uuid primary key default gen_random_uuid(),
-  phone text unique check (phone ~ '^\\+[1-9][0-9]{6,14}$'),   -- E.164; NULL untuk akun beta tanpa nomor HP
+  phone text unique check (phone ~ '^\+[1-9][0-9]{6,14}$'),   -- E.164; NULL untuk akun beta tanpa nomor HP
   username text unique check (username ~ '^[a-z0-9_]{3,24}$'),
   display_name text not null check (char_length(display_name) between 1 and 60),
   about text not null default '' check (char_length(about) <= 140),
