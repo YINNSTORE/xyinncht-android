@@ -65,7 +65,7 @@ export default async function authRoutes(app) {
       throw new HttpError(503, 'otp_disabled', 'Login nomor HP sementara dinonaktifkan');
     }
     const body = parse(
-      z.object({ phone: z.string().min(6).max(25), code: z.string().regex(/^\\d{6}$/), device_name: z.string().max(80).optional() }),
+      z.object({ phone: z.string().min(6).max(25), code: z.string().regex(/^\d{6}$/), device_name: z.string().max(80).optional() }),
       req.body,
     );
     const phone = normalizePhone(body.phone);
