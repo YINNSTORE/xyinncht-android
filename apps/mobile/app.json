@@ -18,7 +18,7 @@
     ],
     "experiments": { "typedRoutes": false },
     "extra": {
-      "apiUrl": "http://10.0.2.2:3000",
+      "apiUrl": "https://api.yinngojo.serv00.net",
       "supportEmail": "support@contoh.com",
       "privacyUrl": "https://contoh.com/privasi",
       "termsUrl": "https://contoh.com/ketentuan",
